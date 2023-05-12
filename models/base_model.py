@@ -13,6 +13,7 @@ class BaseModel:
        **kwargs (any) - allows passing the variable lenght of keyword arguments
     """
     def __int__(self, *args, **kwargs):
+        self.id = str(uuid4())
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
@@ -20,7 +21,6 @@ class BaseModel:
                         value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
                     setattr(self, key, value)
         else:
-            self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
@@ -30,12 +30,12 @@ class BaseModel:
         """
     def __str__(self):
         class_name = type(self).__name__
-        return (f"{class_name} ({self.id}) {self.__dict__}")
+        return ("{} ({}) {}".format(class_name, self.id, self.__dict__))
 
     """func that updates the public instance attribute updated_at with the current datetime"""
     def save(self):
         self.updated_at = datetime.now()
-        storage.save(self)
+        storage.save()
 
     """returns a dictionary containing all the keys/values of __dict__"""
     def to_dict(self):

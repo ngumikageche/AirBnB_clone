@@ -12,7 +12,7 @@ class BaseModel:
        *args (int) - number of arguments that can be passed
        **kwargs (any) - allows passing the variable lenght of keyword arguments
     """
-    def __int__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.id = str(uuid4())
         if kwargs:
             for key, value in kwargs.items():

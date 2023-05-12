@@ -16,7 +16,7 @@ class FileStorage:
     @classmethod 
     def new(self, obj):
         """func that sets in __objects the obj with key <obj class name>.id"""
-        key = f"{obj.__class__.name__}.{obj.id}"
+        key = f"{obj.__class__.__name__}.{obj.id}"
         FileStorage.__objects[key] = obj
     @classmethod
     def save(self):

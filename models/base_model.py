@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 from uuid import uuid4
 from datetime import datetime
-import models 
+import models
 """a class that defines all common attributes/methods for other classes"""
-
 
 
 class BaseModel:
@@ -16,11 +15,12 @@ class BaseModel:
         self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now
+        dt_fmt = '%Y-%m-%dT%H:%M:%S.%f'
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key == 'created_at' or key == 'updated_at':
-                        value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                        value = datetime.strptime(value, dt_fmt)
                     setattr(self, key, value)
                 else:
                     models.storage.new(self)
@@ -30,7 +30,8 @@ class BaseModel:
         class_name = type(self).__class__.__name__
         return ("[{}] ({}) {}".format(class_name, self.id, self.__dict__))
 
-    """func that updates the public instance attribute updated_at with the current datetime"""
+    """func that updates the public instance attribute
+    updated_at with the current datetime"""
     def save(self):
         self.updated_at = datetime.now()
         models.storage.save()

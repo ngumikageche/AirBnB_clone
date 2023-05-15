@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""define a class HBNBCommand contains the entry point of the cmd
+interpreter"""
 import cmd
 import re
 from models.base_model import BaseModel
@@ -9,15 +11,12 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-"""define a class HBNBCommand contains the entry point of the cmd
-interpreter. """
 
 
 class HBNBCommand(cmd.Cmd):
     """representation of HBNBCommand
     Args:
         prompt (string): the cmd prompt
-       __classes (dict): dic representation of all classes
     """
     prompt = "(hbnb) "
     __classes = {
@@ -30,8 +29,35 @@ class HBNBCommand(cmd.Cmd):
         'Review': Review
     }
 
+    def emptyline(self):
+        """Do nothing upon receiving an empty line."""
+        pass
+
+    def default(self, arg):
+        """Default behavior for cmd module when input is invalid"""
+        argdict = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "count": self.do_count,
+            "update": self.do_update
+        }
+        match = re.search(r"\.", arg)
+        if match is not None:
+            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", argl[1])
+            if match is not None:
+                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in argdict.keys():
+                    call = "{} {}".format(argl[0], command[1])
+                    return argdict[command[0]](call)
+        print("*** Unknown syntax: {}".format(arg))
+        return False
+
     def do_quit(self, arg):
-        """Quit command to exit the program"""
+        """Quit command to exit the program
+        Usage: quite
+        """
         return True
 
     def do_EOF(self, arg):
@@ -43,7 +69,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """func that Creates an instance of the BaseModel
+        """Usage: show <class> <id> or <class>.show>id>)
+        Creates an instance of the BaseModel
         saves it to the JSON file) and prints the id."""
         args = arg.split()
         if len(args) == 0:
@@ -56,6 +83,16 @@ class HBNBCommand(cmd.Cmd):
                 new_instance = HBNBCommand.__classes[class_name]()
                 storage.save()
                 print(new_instance.id)
+
+    def do_count(self, arg):
+        """Usage: count <class> or <class>.count()
+        Retrieve the number of instances of a given class."""
+        argl = arg.split()
+        count = 0
+        for obj in storage.all().values():
+            if argl[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
 
     def do_show(self, arg):
         """Print the strng representation of an
@@ -141,12 +178,13 @@ class HBNBCommand(cmd.Cmd):
         and id by adding or updating attribute.
             Usage: update <class name> <id>
             <attribute name> "<attribute value>"
+        Args:
         """
         args = arg.split()
         if not arg:
             print("** class name missing **")
             return
-        elif args[0] not in models:
+        elif args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
         elif len(args) == 1:

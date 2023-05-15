@@ -36,20 +36,27 @@ class FileStorage:
     def save(self):
         """Serializes __objects to the JSON
         file (path: __file_path)"""
-        with open(FileStorage.__file_path, mode="w", encoding="utf-8") as f:
-            obj_dict = {k: v.to_dict()
-                        for k, v in FileStorage.__objects.items()}
-            json.dump(obj_dict, f)
+        try:
+            with open(FileStorage.__file_path, mode="w") as f:
+                obj_dict = {}
+                for k, v in FileStorage.__objects.items():
+                    obj_dict[k] = v.to_dict()
+                json.dump(obj_dict, f)
+        except FileNotFoundError:
+            return
 
     @classmethod
     def reload(self):
-        """deserializes the JSON file to __objects"""
+        """deserializes the JSON file to __objects
+        Raises:
+            FileNotFoundError: If the JSON file specified by
+             FileStorage.__file_path does not exist."""
         try:
-            with open(FileStorage.__file_path, mode="r") as f:
-                obj_dict = json.load(f)
-                for k, v in obj_dict.items():
-                    cls_name, obj_id = k.split('.')
-                    cls = models.cls_name
-                    FileStorage.__objects[k] = cls(**v)
+            with open(FileStorage.__file_path) as f:
+                objdict = json.load(f)
+                for o in objdict.values():
+                    cls_name = o["__class__"]
+                    del o["__class__"]
+                    self.new(eval(cls_name)(**o))
         except FileNotFoundError:
             return

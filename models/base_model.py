@@ -13,33 +13,34 @@ class BaseModel:
     """
     def __init__(self, *args, **kwargs):
         self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now
+        self.created_at = datetime.today()
+        self.updated_at = datetime.today()
         dt_fmt = '%Y-%m-%dT%H:%M:%S.%f'
-        if kwargs:
+        if len(kwargs):
             for key, value in kwargs.items():
-                if key != '__class__':
-                    if key == 'created_at' or key == 'updated_at':
-                        value = datetime.strptime(value, dt_fmt)
-                    setattr(self, key, value)
+                if key == 'created_at' or key == 'updated_at':
+                    self.__dict__[key] = datetime.strptime(value, dt_fmt)
                 else:
-                    models.storage.new(self)
-    """print [<class name>} (<self.id>) <self.__dict__>
-        """
+                    self.__dict__[key] = value
+        else:
+            models.storage.new(self)
+
     def __str__(self):
+        """print [<class name>} (<self.id>) <self.__dict__>
+           """
         class_name = type(self).__class__.__name__
         return ("[{}] ({}) {}".format(class_name, self.id, self.__dict__))
 
-    """func that updates the public instance attribute
-    updated_at with the current datetime"""
     def save(self):
+        """func that updates the public instance attribute
+        updated_at with the current datetime"""
         self.updated_at = datetime.now()
         models.storage.save()
 
-    """returns a dictionary containing all the keys/values of __dict__"""
     def to_dict(self):
-        obj_dict = self.__dict__.copy()
-        obj_dict['__class__'] = self.__class__.__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
-        return obj_dict
+        """returns a dictionary containing all the keys/values of __dict__"""
+        rdict = self.__dict__.copy()
+        rdict["created_at"] = self.created_at.isoformat()
+        rdict["updated_at"] = self.updated_at.isoformat()
+        rdict["__class__"] = self.__class__.__name__
+        return rdict

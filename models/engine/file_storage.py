@@ -18,7 +18,7 @@ class FileStorage:
     """
     __file_path = "file.json"
     __objects = {}
-
+        
     @classmethod
     def all(self):
         """func that returns the dict __objects """
@@ -34,16 +34,14 @@ class FileStorage:
 
     @classmethod
     def save(self):
-        """Serializes __objects to the JSON
-        file (path: __file_path)"""
-        try:
-            with open(FileStorage.__file_path, mode="w") as f:
-                obj_dict = {}
-                for k, v in FileStorage.__objects.items():
-                    obj_dict[k] = v.to_dict()
-                json.dump(obj_dict, f)
-        except FileNotFoundError:
-            return
+        """Saves the data from the __objects dictionary to the JSON FILE
+        
+        This method serializes the __objects dictionary
+        and writes it to the JSON file"""
+        odict = FileStorage.__objects
+        objdict = {obj: odict[obj].to_dict() for obj in odict.keys()}
+        with open(FileStorage.__file_path, "w") as f:
+            json.dump(objdict, f)
 
     @classmethod
     def reload(self):

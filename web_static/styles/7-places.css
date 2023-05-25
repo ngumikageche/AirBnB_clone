@@ -1,0 +1,29 @@
+/* Places Section */
+
+
+/* places h1 style */
+.places h1 {
+    font-size: 30px;
+    margin: .67em 0 .67em 0;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* places style */
+.places article{
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: #FF5A5F solid 1px;
+    border-radius: 4px;
+    display:inline-block;
+    
+}
+.places h2 {
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}

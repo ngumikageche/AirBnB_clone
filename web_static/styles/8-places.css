@@ -1,0 +1,70 @@
+/* Places Section */
+
+
+/* places h1 style */
+.places h1 {
+    font-size: 30px;
+    margin: .67em 0 .67em 0;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* places style */
+.places article{
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: #FF5A5F solid 1px;
+    border-radius: 4px;
+    display:inline-block;
+    
+}
+
+/* places h2 style */
+.places h2 {
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* price by night style */
+.places .price_by_night {
+    color: #FF5A5F;
+    border: #FF5A5F solid 4px;
+    min-width: 60px;
+    height: 60px;
+    dispay: flex;
+    justify-content: center;
+    font-size: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+/* Information style */
+.places .information {
+    height: 80px;
+    border-top: #DDDDDD solid 1px;
+    border-bottom: #DDDDDD solid 1px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
+}
+/* Icons */
+.information .max_guest{
+    width: 100px;
+    }
+.information .number_rooms{
+    width: 100px;
+    
+}
+.information .number_bathrooms{
+    width: 100px;
+    }
+footer {
+    position: relative;
+}
+
